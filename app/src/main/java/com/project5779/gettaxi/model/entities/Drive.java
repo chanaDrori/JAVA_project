@@ -1,8 +1,8 @@
 package com.project5779.gettaxi.model.entities;
 
-public class Ride
+public class Drive
 {
-    private StateOfRide state;
+    private StateOfDrive state;
     private String startPoint;
     private String endPoint;
     private String startTime;
@@ -11,7 +11,7 @@ public class Ride
     private String phoneClient;
     private String emailClient;
 
-   /* public Ride(StateOfRide _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
+   /* public Drive(StateOfDrive _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
                 String _nameClient, String _phoneClient, String _emailClient)
     {
         this(_state,_startPoint ,_endPoint ,_startTime ,_endTime ,_nameClient ,_phoneClient ,_emailClient );
@@ -19,6 +19,7 @@ public class Ride
     */
 
     /**
+     * constructor of drive.
      * @param _state enum- state of the ride (start/work/end)
      * @param _startPoint string - The starting point of the ride
      * @param _endPoint string - The ending point of the ride
@@ -28,8 +29,8 @@ public class Ride
      * @param _phoneClient string - The client's phone number
      * @param _emailClient string - The client's mail address
      */
-    public Ride(StateOfRide _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
-                String _nameClient, String _phoneClient, String _emailClient)
+    public Drive(StateOfDrive _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
+                 String _nameClient, String _phoneClient, String _emailClient)
     {
         this.state = _state;
         this.startPoint = _startPoint;
@@ -42,21 +43,24 @@ public class Ride
         
     }
 
-    /**getter
+    /**
+     * getter
      * @return state. enum- state of the ride (start/work/end)
      */
-    public StateOfRide getState() {
+    public StateOfDrive getState() {
         return state;
     }
 
-    /**getter
+    /**
+     * getter
      * @return endPoint. string - The ending point of the ride
      */
     public String getEndPoint() {
         return endPoint;
     }
 
-    /**getter
+    /**
+     * getter
      * @return emailClient. string - The client's mail address
      */
     public String getEmailClient() {
@@ -143,7 +147,8 @@ public class Ride
         this.phoneClient = phoneClient;
     }
 
-    /**setter
+    /**
+     * setter
      * @param startPoint string - The starting point of the ride
      */
     public void setStartPoint(String startPoint) {
@@ -162,7 +167,7 @@ public class Ride
      * setter
      * @param state enum- state of the ride (start/work/end)
      */
-    public void setState(StateOfRide state) {
+    public void setState(StateOfDrive state) {
         this.state = state;
     }
 }
