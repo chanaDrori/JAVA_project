@@ -44,6 +44,11 @@ public class Drive
     }
 
     /**
+     * empty constructor
+     */
+    public Drive(){}
+
+    /**
      * getter
      * @return state. enum- state of the ride (start/work/end)
      */
