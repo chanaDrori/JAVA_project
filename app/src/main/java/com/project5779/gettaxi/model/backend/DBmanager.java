@@ -4,5 +4,5 @@ import java.util.*;
 
 public interface DBmanager {
 
-    public void addNewDrive(Drive newDrive);
+    public void addNewDrive(Drive newDrive) throws Exception;
 }

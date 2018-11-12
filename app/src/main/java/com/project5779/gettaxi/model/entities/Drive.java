@@ -170,4 +170,27 @@ public class Drive
     public void setState(StateOfDrive state) {
         this.state = state;
     }
+
+    /**
+     *
+     * @param obj object for compare.
+     * @return true if the object equals to this Drive.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
+
+        Drive drive = (Drive) obj;
+        return (this.startPoint.equals(drive.getStartPoint()) &&
+                this.state.equals( drive.getState()) &&
+                this.endPoint.equals(drive.getEndPoint()) &&
+                this.emailClient.equals(drive.getEmailClient()) &&
+                this.endTime.equals(drive.getEndTime()) &&
+                this.nameClient.equals(drive.getNameClient()) &&
+                this.phoneClient.equals(drive.getPhoneClient()) &&
+                this.startTime.equals(drive.getStartTime()));
+    }
 }
