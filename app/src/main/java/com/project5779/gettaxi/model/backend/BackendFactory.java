@@ -4,13 +4,23 @@ import android.content.Context;
 
 public final class BackendFactory
 {
-    static DBmanager instance = null;
-    public final static DBmanager getInstance(Context context)
+    public static String mode = "list";
+    public static DBmanager instance = null;
+    public static final DBmanager getInstance(Context context)
     {
-        if (instance == null) {
-          //  instance = new model.datasource.
+        if (mode.equals("list")) {
+            if (instance == null) {
+                  instance = new com.project5779.gettaxi.model.datasource.DatabaseList();
+            }
+            return instance;
         }
-        return instance;
+        else
+        {
+            if (instance == null) {
+                 instance = new com.project5779.gettaxi.model.datasource.DatabaseFirebase();
+            }
+            return instance;
+        }
     }
 
 }
