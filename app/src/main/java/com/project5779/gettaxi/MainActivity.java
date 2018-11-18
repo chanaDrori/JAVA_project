@@ -23,7 +23,6 @@ import com.project5779.gettaxi.model.entities.StateOfDrive;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
-   // DBmanager dBmanager = BackendFactory.getInstance(this);
     private EditText NameEditText;
     private EditText EmailEditText;
     private EditText PhoneEditText;
@@ -35,8 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button AddButton;
 
     /**
-     *
-     * 
+     *The function finds all the objects "View" from this Activity
      */
     private void findViews()
     {
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StateSpinner = (Spinner)findViewById(R.id.state);
         AddButton =(Button) findViewById(R.id.button2);
 
-        AddButton.setOnClickListener(this);
+        AddButton.setOnClickListener(this); //add this activity to the Listeners of Click on AddButton.
 
         NameEditText.addTextChangedListener(this);
         PhoneEditText.addTextChangedListener(this);
@@ -99,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //if there are strings on the fields: name & phone & start-point , set the button.enable to true
         //else- set Button.enable to false
         if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
-                &&StartPointEditText.toString().trim().length() !=0){
+                &&StartPointEditText.toString().trim().length() !=0 && NameEditText.toString() != null
+                &&PhoneEditText.toString() != null &&StartPointEditText.toString() != null){
             AddButton.setEnabled(true);
         } else {
             AddButton.setEnabled(false);

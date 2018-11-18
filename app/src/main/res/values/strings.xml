@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">getTaxi</string>
-    <string name="button2">הוספת נסיעה חדשה</string>
-    <string name="button3">הצג נסיעות קיימות</string>
-    <string name="textView">שלום! אנא הכנס את פרטי הנסיעה:</string>
+    <string name="buttonAdd">Adding a new drive</string>
+    <string name="textView">Welcome! Please enter your drive details.</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="startPoint">Strting point</string>
+    <string name="endPoint">Ending point</string>
+    <string name="startTime">Beginning time (hh:mm)</string>
+    <string name="endTime">End time (hh:mm)</string>
 </resources>
