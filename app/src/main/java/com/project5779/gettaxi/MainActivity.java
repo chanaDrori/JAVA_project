@@ -1,17 +1,21 @@
 package com.project5779.gettaxi;
 
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Adapter;
+import android.widget.TimePicker;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,7 +25,9 @@ import com.project5779.gettaxi.model.backend.TaxiConst;
 import com.project5779.gettaxi.model.entities.Drive;
 import com.project5779.gettaxi.model.entities.StateOfDrive;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity {
 
     private EditText NameEditText;
     private EditText EmailEditText;
@@ -32,30 +38,106 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText EndTimeEditText;
     private Spinner StateSpinner;
     private Button AddButton;
-
+   // private TimePickerDialog
     /**
      *The function finds all the objects "View" from this Activity
      */
-    private void findViews()
-    {
-        NameEditText = (EditText)findViewById(R.id.name);
-        EmailEditText = (EditText)findViewById(R.id.email);
-        PhoneEditText = (EditText)findViewById(R.id.phone);
-        StartPointEditText = (EditText)findViewById(R.id.startPoint);
-        EndPointEditText = (EditText)findViewById(R.id.endPoint);
-        StartTimeEditText = (EditText)findViewById(R.id.startTime);
-        EndTimeEditText = (EditText)findViewById(R.id.endTime);
-        StateSpinner = (Spinner)findViewById(R.id.state);
-        AddButton =(Button) findViewById(R.id.button2);
+    private void findViews() {
+        NameEditText = (EditText) findViewById(R.id.name);
+        EmailEditText = (EditText) findViewById(R.id.email);
+        PhoneEditText = (EditText) findViewById(R.id.phone);
+        StartPointEditText = (EditText) findViewById(R.id.startPoint);
+        EndPointEditText = (EditText) findViewById(R.id.endPoint);
+        StartTimeEditText = (EditText) findViewById(R.id.startTime);
+        EndTimeEditText = (EditText) findViewById(R.id.endTime);
+        StateSpinner = (Spinner) findViewById(R.id.state);
+        AddButton = (Button) findViewById(R.id.button2);
 
-        AddButton.setOnClickListener(this); //add this activity to the Listeners of Click on AddButton.
+        OnClickListener timeP = new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        if (v == StartTimeEditText){ StartTimeEditText.setText(selectedHour + ":" + selectedMinute);}
+                        else  {EndTimeEditText.setText(selectedHour + ":" + selectedMinute);}
+                    }
+                }, hour, minute, true);
+                if (v == StartTimeEditText){
+                    mTimePicker.setTitle("Set beginning time:");
+                }
+                else
+                {
+                    mTimePicker.setTitle("Set end time:");
+                }
+                mTimePicker.show();
+            }
+        };
+        StartTimeEditText.setOnClickListener(timeP);
+        EndTimeEditText.setOnClickListener(timeP);
 
-        NameEditText.addTextChangedListener(this);
-        PhoneEditText.addTextChangedListener(this);
-        StartPointEditText.addTextChangedListener(this);
+        AddButton.setOnClickListener(new OnClickListener() {
+            /**
+             * the function add new drive when the user click on the button
+             * @param v View Button
+             */
+            @Override
+            public void onClick(View v) {
+                if (v == AddButton)
+          /*  new AsyncTask<Void, Void, Long>() {
+            @Override
+               protected void onPostExecute(Long idResult)
+                {
+              super.onPostExecute(idResult);
+                  if (idResult > 0)
+                            Toast.makeText(getBaseContext(), "insert id: " + idResult, Toast.LENGTH_LONG).show();
+                               }
+                                @Override
+                                  protected Long doInBackground(Void... params)
+                  {
+                return DBManagerFactory.getManager().addLecturer(contentValues);
+                 } }.execute();*/
+
+                    addDrive();// add new drive to the database
+            }
+        }
+); //add this activity to the Listeners of Click on AddButton.
+
+        TextWatcher TW = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //if there are strings on the fields: name & phone & start-point , set the button.enable to true
+                //else- set Button.enable to false
+                if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
+                        &&StartPointEditText.toString().trim().length() !=0 && NameEditText.toString() != null
+                        &&PhoneEditText.toString() != null &&StartPointEditText.toString() != null){
+                    AddButton.setEnabled(true);
+                } else {
+                    AddButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        NameEditText.addTextChangedListener(TW);
+        PhoneEditText.addTextChangedListener(TW);
+        StartPointEditText.addTextChangedListener(TW);
 
         StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,67 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViews();
     }
 
-    /**
-     * the function add new drive whene the user click on the button
-     * @param v View Button
-     */
-    @Override
-    public void onClick(View v) {
-        if (v == AddButton)
-            addDrive();// add new drive to the database
-    }
-
-    /**
-     * This method is called to notify you that, within <code>s</code>,
-     * the <code>count</code> characters beginning at <code>start</code>
-     * are about to be replaced by new text with length <code>after</code>.
-     * It is an error to attempt to make changes to <code>s</code> from
-     * this callback.
-     *
-     * @param s
-     * @param start
-     * @param count
-     * @param after
-     */
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        //if there are strings on the fields: name & phone & start-point , set the button.enable to true
-        //else- set Button.enable to false
-        if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
-                &&StartPointEditText.toString().trim().length() !=0 && NameEditText.toString() != null
-                &&PhoneEditText.toString() != null &&StartPointEditText.toString() != null){
-            AddButton.setEnabled(true);
-        } else {
-            AddButton.setEnabled(false);
-        }
-    }
-
-    /**
-     * This method is called to notify you that, somewhere within
-     * <code>s</code>, the text has been changed.
-     * It is legitimate to make further changes to <code>s</code> from
-     * this callback, but be careful not to get yourself into an infinite
-     * loop, because any changes you make will cause this method to be
-     * called again recursively.
-     * (You are not told where the change took place because other
-     * afterTextChanged() methods may already have made other changes
-     * and invalidated the offsets.  But if you need to know here,
-     * you can use  in {@link #onTextChanged}
-     * to mark your place and then look up from here where the span
-     * ended up.
-     *
-     * @param s
-     */
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
 
     /**
      * the function add a new drive from the UI to the database according to the BackendFactory
