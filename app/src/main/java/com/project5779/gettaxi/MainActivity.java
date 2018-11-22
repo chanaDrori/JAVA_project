@@ -117,18 +117,37 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if there are strings on the fields: name & phone & start-point , set the button.enable to true
                 //else- set Button.enable to false
-                if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
+
+               /* if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
                         &&StartPointEditText.toString().trim().length() !=0 && NameEditText.toString() != null
                         &&PhoneEditText.toString() != null &&StartPointEditText.toString() != null){
                     AddButton.setEnabled(true);
                 } else {
                     AddButton.setEnabled(false);
                 }
+                */
+                if(NameEditText.toString().trim().length() ==0 || PhoneEditText.toString().trim().length() ==0
+                        || StartPointEditText.toString().trim().length() ==0 || NameEditText.toString() == null
+                        || PhoneEditText.toString() == null || StartPointEditText.toString() == null){
+                    AddButton.setEnabled(false);
+                }
+                else {
+                    AddButton.setEnabled(true);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //if there are strings on the fields: name & phone & start-point , set the button.enable to true
+                //else- set Button.enable to false
+                if(NameEditText.toString().trim().length() ==0 || PhoneEditText.toString().trim().length() ==0
+                        || StartPointEditText.toString().trim().length() ==0 || NameEditText.toString() == null
+                        || PhoneEditText.toString() == null || StartPointEditText.toString() == null){
+                    AddButton.setEnabled(false);
+                }
+                else {
+                    AddButton.setEnabled(true);
+                }
             }
         };
         NameEditText.addTextChangedListener(TW);
