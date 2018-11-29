@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Adapter;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText EndTimeEditText;
     private Spinner StateSpinner;
     private Button AddButton;
-   // private TimePickerDialog
+
     /**
      *The function finds all the objects "View" from this Activity
      */
@@ -53,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
         StateSpinner = (Spinner) findViewById(R.id.state);
         AddButton = (Button) findViewById(R.id.button2);
 
+        /**
+         *Creator listener to controls - EndTimeEditText, StartTimeEditText
+         */
         OnClickListener timeP = new OnClickListener() {
+            /**
+             * The function triggers TimePickerDialog when the user click on the match EditText
+             * @param v View - Edit Text that clicked.
+             */
             @Override
             public void onClick(final View v) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -61,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    /**
+                     * set the string of the time in the editText
+                     * @param timePicker
+                     * @param selectedHour int. the hour now.
+                     * @param selectedMinute int. the minute now.
+                     */
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         if (v == StartTimeEditText){ StartTimeEditText.setText(selectedHour + ":" + selectedMinute);}
@@ -83,71 +98,49 @@ public class MainActivity extends AppCompatActivity {
         AddButton.setOnClickListener(new OnClickListener() {
             /**
              * the function add new drive when the user click on the button
+             *
              * @param v View Button
              */
             @Override
             public void onClick(View v) {
-                if (v == AddButton)
-          /*  new AsyncTask<Void, Void, Long>() {
-            @Override
-               protected void onPostExecute(Long idResult)
-                {
-              super.onPostExecute(idResult);
-                  if (idResult > 0)
-                            Toast.makeText(getBaseContext(), "insert id: " + idResult, Toast.LENGTH_LONG).show();
-                               }
-                                @Override
-                                  protected Long doInBackground(Void... params)
-                  {
-                return DBManagerFactory.getManager().addLecturer(contentValues);
-                 } }.execute();*/
+                if (v == AddButton) {
+
+                  /*  //AsyncTask myAsyncTask =
+                            new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                        }
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                           // addDrive();
+                            return null;
+                        }
+                    }.execute();*/
 
                     addDrive();// add new drive to the database
+                }
             }
-        }
-); //add this activity to the Listeners of Click on AddButton.
+        }); //add this activity to the Listeners of Click on AddButton.
 
         TextWatcher TW = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //if there are strings on the fields: name & phone & start-point , set the button.enable to true
-                //else- set Button.enable to false
-
-               /* if(NameEditText.toString().trim().length() !=0 && PhoneEditText.toString().trim().length() !=0
-                        &&StartPointEditText.toString().trim().length() !=0 && NameEditText.toString() != null
-                        &&PhoneEditText.toString() != null &&StartPointEditText.toString() != null){
-                    AddButton.setEnabled(true);
-                } else {
-                    AddButton.setEnabled(false);
-                }
-                */
-                if(NameEditText.toString().trim().length() ==0 || PhoneEditText.toString().trim().length() ==0
-                        || StartPointEditText.toString().trim().length() ==0 || NameEditText.toString() == null
-                        || PhoneEditText.toString() == null || StartPointEditText.toString() == null){
-                    AddButton.setEnabled(false);
-                }
-                else {
-                    AddButton.setEnabled(true);
-                }
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
                 //if there are strings on the fields: name & phone & start-point , set the button.enable to true
                 //else- set Button.enable to false
-                if(NameEditText.toString().trim().length() ==0 || PhoneEditText.toString().trim().length() ==0
-                        || StartPointEditText.toString().trim().length() ==0 || NameEditText.toString() == null
-                        || PhoneEditText.toString() == null || StartPointEditText.toString() == null){
+                if(NameEditText.getText().toString().trim().length() == 0||
+                        PhoneEditText.getText().toString().trim().length() == 0||
+                        StartPointEditText.getText().toString().trim().length() == 0 )
                     AddButton.setEnabled(false);
-                }
-                else {
+                else
                     AddButton.setEnabled(true);
-                }
             }
         };
         NameEditText.addTextChangedListener(TW);
@@ -197,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             this.StartPointEditText.setText(null);
             this.EndPointEditText.setText(null);
             this.AddButton.setEnabled(false);
-
 
         }
         catch (Exception exp)

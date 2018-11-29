@@ -5,8 +5,11 @@
     <string name="name">Name</string>
     <string name="phone">Phone</string>
     <string name="email">Email</string>
-    <string name="startPoint">Strting point</string>
+    <string name="startPoint">Starting point</string>
     <string name="endPoint">Ending point</string>
     <string name="startTime">Beginning time (hh:mm)</string>
     <string name="endTime">End time (hh:mm)</string>
+    <string name="startActivity">start Activity</string>
+    <string name="startButton">Enter to start</string>
+    <string name="welcomeTextView">Welcome to Get Taxi!!</string>
 </resources>
