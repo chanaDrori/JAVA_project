@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.project5779.gettaxi.model.backend.BackendFactory;
 import com.project5779.gettaxi.model.backend.DBmanager;
 import com.project5779.gettaxi.model.backend.TaxiConst;
+import com.project5779.gettaxi.model.datasource.DatabaseFirebase;
 import com.project5779.gettaxi.model.entities.Drive;
 import com.project5779.gettaxi.model.entities.StateOfDrive;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         StateSpinner = (Spinner) findViewById(R.id.state);
         AddButton = (Button) findViewById(R.id.button2);
 
+        StateSpinner.setSelection(0);
         /**
          *Creator listener to controls - EndTimeEditText, StartTimeEditText
          */
@@ -104,21 +107,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == AddButton) {
-
-                  /*  //AsyncTask myAsyncTask =
-                            new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            super.onPostExecute(aVoid);
-                        }
-
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                           // addDrive();
-                            return null;
-                        }
-                    }.execute();*/
-
                     addDrive();// add new drive to the database
                 }
             }
@@ -141,11 +129,29 @@ public class MainActivity extends AppCompatActivity {
                     AddButton.setEnabled(false);
                 else
                     AddButton.setEnabled(true);
+
+               /* if (s == EmailEditText)
+                {
+                    String target = EmailEditText.getText().toString();
+                    try{
+                    if (TextUtils.isEmpty(target)) {
+
+                    }
+                    else if (! android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches())
+                    {
+
+                    }}
+                    catch (Exception exp)
+                    {
+
+                    }
+                }*/
             }
         };
         NameEditText.addTextChangedListener(TW);
         PhoneEditText.addTextChangedListener(TW);
         StartPointEditText.addTextChangedListener(TW);
+        EmailEditText.addTextChangedListener(TW);
 
         StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
@@ -178,17 +184,45 @@ public class MainActivity extends AppCompatActivity {
             contentValues.put(TaxiConst.DriveConst.END_TIME , this.EndTimeEditText.getText().toString());
             contentValues.put(TaxiConst.DriveConst.STATE , this.StateSpinner.getSelectedItem().toString());
 
-            // Getting an instance of the backend using the Function Factory adds a new drive
-            BackendFactory.getInstance(this).addNewDrive(contentValues);
+            try {
+                // Getting an instance of the backend using the Function Factory adds a new drive
+                   BackendFactory.getInstance(this).addNewDrive(contentValues);
+               /* BackendFactory.getInstance(this).addNewDrive(contentValues, new DatabaseFirebase.Action<Long>() {
+                    @Override
+                    public void onSuccess(Long obj) {
+                        Toast.makeText(getBaseContext(), "insert the drive", Toast.LENGTH_LONG).show();
+                    }
 
+                    @Override
+                    public void onFailure(Exception exception) {
+                        Toast.makeText(getBaseContext(), "error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onProgress(String status, double percent) {
+                        if (percent != 100)
+                            AddButton.setEnabled(false);
+                    }
+
+                });*/
+
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
+            }
+
+
+            Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
             // Initialize all the fields
-            this.NameEditText.setText(null);
-            this.PhoneEditText.setText(null);
-            this.EmailEditText.setText(null);
-            this.StartTimeEditText.setText(null);
-            this.EndTimeEditText.setText(null);
-            this.StartPointEditText.setText(null);
-            this.EndPointEditText.setText(null);
+            this.NameEditText.setText("");
+            this.PhoneEditText.setText("");
+            this.EmailEditText.setText("");
+            this.StartTimeEditText.setText("");
+            this.EndTimeEditText.setText("");
+            this.StartPointEditText.setText("");
+            this.EndPointEditText.setText("");
+            StateSpinner.setSelection(0);
             this.AddButton.setEnabled(false);
 
         }

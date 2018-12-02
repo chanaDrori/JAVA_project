@@ -1,8 +1,7 @@
 package com.project5779.gettaxi.model.backend;
 import android.content.ContentValues;
 
-import com.project5779.gettaxi.model.entities.Drive;
-import java.util.*;
+import com.project5779.gettaxi.model.datasource.DatabaseFirebase;
 
 public interface DBmanager {
 

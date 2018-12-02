@@ -4,7 +4,7 @@ import android.content.Context;
 
 public final class BackendFactory
 {
-    public static String mode = "list";
+    public static String mode = "fire";
     public static DBmanager instance = null;
     public static final DBmanager getInstance(Context context)
     {
