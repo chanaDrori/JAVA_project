@@ -24,11 +24,11 @@ public class DatabaseFirebase implements DBmanager{
         void onProgress(String status, double percent);
     }*/
     static DatabaseReference DriveRef;
-    static List<Drive> driveList;
+    //static List<Drive> driveList;
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DriveRef = database.getReference("Drives");
-        driveList = new ArrayList<>();
+       // driveList = new ArrayList<>();
     }
 
     @Override
