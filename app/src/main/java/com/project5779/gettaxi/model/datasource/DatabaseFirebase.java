@@ -1,7 +1,9 @@
 package com.project5779.gettaxi.model.datasource;
 
 import android.content.ContentValues;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,11 +34,35 @@ public class DatabaseFirebase implements DBmanager{
     }
 
     @Override
-    public void addNewDrive(ContentValues contentValues) throws Exception {
-        Drive newDrive = ContentValuesToDrive(contentValues);
-      //  DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
-        DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint()).setValue(newDrive);
-    }
+    public void addNewDrive(final ContentValues contentValues) throws Exception {
+            AsyncTask asT = new AsyncTask<Void, Void, Void>() {
+                /**
+                 * Override this method to perform a computation on a background thread. The
+                 * specified parameters are the parameters passed to {@link #execute}
+                 * by the caller of this task.
+                 * <p>
+                 * This method can call {@link #publishProgress} to publish updates
+                 * on the UI thread.
+                 *
+                 * @param voids The parameters of the task.
+                 * @return A result, defined by the subclass of this task.
+                 * @see #onPreExecute()
+                 * @see #onPostExecute
+                 * @see #publishProgress
+                 */
+                @Nullable
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    Drive newDrive = ContentValuesToDrive(contentValues);
+                    //  DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
+                    DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint()).setValue(newDrive);
+                    return null;
+                }
+            };
+            asT.execute();
+        }
+
+
     /*
     private static void addDriveToFirebase(final Drive drive, final Action<Long> action)
     {
