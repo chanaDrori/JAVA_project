@@ -15,16 +15,16 @@ public class DatabaseList implements DBmanager
 
     /**
      * The function add new drive to DB list.
-     * @param contentValues ContentValues new drive item to add to ArrayList<Drive> DriveList.
+     * @param newDrive - Drive  a new drive item to add to ArrayList<Drive> DriveList.
      * @throws Exception if the new object was exist in the list
      */
     @Override
-    public void addNewDrive(ContentValues contentValues) throws Exception
+    public void addNewDrive(Drive newDrive) throws Exception
     {
-        Drive newDrive = ContentValuesToDrive(contentValues);
+       // Drive newDrive = ContentValuesToDrive(contentValues);
         for (Drive driveItem : DriveList)
             if (driveItem.equals(newDrive))
-                throw new Exception("נסיעה זו כבר קיימת במערכת");
+                throw new Exception("This drive already exists in the system");
         DriveList.add(newDrive);
     }
 
@@ -33,6 +33,7 @@ public class DatabaseList implements DBmanager
      * @param contentValues ContentValues contain values for a drive
      * @return Drive from the contentValues
      */
+    /*
     public static Drive ContentValuesToDrive(ContentValues contentValues)
     {
         Drive drive = new Drive();
@@ -46,4 +47,5 @@ public class DatabaseList implements DBmanager
         drive.setState(StateOfDrive.valueOf(contentValues.getAsString(TaxiConst.DriveConst.STATE)));
         return drive;
     }
+    */
 }

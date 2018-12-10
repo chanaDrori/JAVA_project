@@ -1,9 +1,13 @@
 package com.project5779.gettaxi.model.datasource;
 
 import android.content.ContentValues;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,33 +38,24 @@ public class DatabaseFirebase implements DBmanager{
     }
 
     @Override
-    public void addNewDrive(final ContentValues contentValues) throws Exception {
-            AsyncTask asT = new AsyncTask<Void, Void, Void>() {
-                /**
-                 * Override this method to perform a computation on a background thread. The
-                 * specified parameters are the parameters passed to {@link #execute}
-                 * by the caller of this task.
-                 * <p>
-                 * This method can call {@link #publishProgress} to publish updates
-                 * on the UI thread.
-                 *
-                 * @param voids The parameters of the task.
-                 * @return A result, defined by the subclass of this task.
-                 * @see #onPreExecute()
-                 * @see #onPostExecute
-                 * @see #publishProgress
-                 */
+    public void addNewDrive(final Drive newDrive) throws Exception {
+           /* AsyncTask asT = new AsyncTask<Void, Void, Void>() {
                 @Nullable
                 @Override
                 protected Void doInBackground(Void... voids) {
                     Drive newDrive = ContentValuesToDrive(contentValues);
-                    //  DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
+                    //DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
                     DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint()).setValue(newDrive);
                     return null;
                 }
             };
-            asT.execute();
-        }
+            asT.execute();*/
+
+        // Drive newDrive = ContentValuesToDrive(contentValues);
+        //DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
+        //DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint().toString()).setValue(newDrive);
+        DriveRef.push().setValue(newDrive);
+    }
 
 
     /*
@@ -82,6 +77,8 @@ public class DatabaseFirebase implements DBmanager{
         });
     }
 */
+
+    /*
     public static Drive ContentValuesToDrive(ContentValues contentValues)
     {
         Drive drive = new Drive();
@@ -95,4 +92,5 @@ public class DatabaseFirebase implements DBmanager{
         drive.setState(StateOfDrive.valueOf(contentValues.getAsString(TaxiConst.DriveConst.STATE)));
         return drive;
     }
+    */
 }

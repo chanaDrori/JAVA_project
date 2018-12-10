@@ -13,7 +13,7 @@
         android:background="@mipmap/taxi_foreground">
 
         <TextView
-            android:id="@+id/wellcomTextView"
+            android:id="@+id/welcomeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/welcomeTextView"
@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:text="@string/startButton"
             android:layout_margin="10dp"
-            android:background="@color/yellow"/>
+            android:background="@color/yellow"
+            />
 
     </LinearLayout>
 

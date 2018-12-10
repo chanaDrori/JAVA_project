@@ -12,4 +12,6 @@
     <string name="startActivity">start Activity</string>
     <string name="startButton">Enter to start</string>
     <string name="welcomeTextView">Welcome to Get Taxi!!</string>
+    <string name="there_is_no_need_to_fill">End time - There is no need to fill</string>
+    <string name="error_phone_9_digits">The number phone must include 9 digits</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.project5779.gettaxi.model.entities;
 
+import android.location.Location;
+
 public class Drive
 {
     private StateOfDrive state;
-    private String startPoint;
-    private String endPoint;
+    private Location startPoint;
+    private Location endPoint;
     private String startTime;
     private String endTime;
     private String nameClient;
@@ -29,7 +31,7 @@ public class Drive
      * @param _phoneClient string - The client's phone number
      * @param _emailClient string - The client's mail address
      */
-    public Drive(StateOfDrive _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
+    public Drive(StateOfDrive _state, Location _startPoint, Location _endPoint, String _startTime, String _endTime,
                  String _nameClient, String _phoneClient, String _emailClient)
     {
         this.state = _state;
@@ -60,7 +62,7 @@ public class Drive
      * getter
      * @return endPoint. string - The ending point of the ride
      */
-    public String getEndPoint() {
+    public Location getEndPoint() {
         return endPoint;
     }
 
@@ -100,7 +102,7 @@ public class Drive
      * getter
      * @return startPoint. string - The starting point of the ride
      */
-    public String getStartPoint() {
+    public Location getStartPoint() {
         return startPoint;
     }
 
@@ -116,7 +118,7 @@ public class Drive
      * setter
      * @param endPoint string - The ending point of the ride
      */
-    public void setEndPoint(String endPoint) {
+    public void setEndPoint(Location endPoint) {
         this.endPoint = endPoint;
     }
 
@@ -156,7 +158,7 @@ public class Drive
      * setter
      * @param startPoint string - The starting point of the ride
      */
-    public void setStartPoint(String startPoint) {
+    public void setStartPoint(Location startPoint) {
         this.startPoint = startPoint;
     }
 

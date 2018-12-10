@@ -4,6 +4,9 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +33,9 @@ import com.project5779.gettaxi.model.entities.Drive;
 import com.project5779.gettaxi.model.entities.StateOfDrive;
 
 import java.util.Calendar;
+import java.util.List;
+
+import static android.text.TextUtils.isEmpty;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText StartPointEditText;
     private EditText EndPointEditText;
     private EditText StartTimeEditText;
-    private EditText EndTimeEditText;
+   // private EditText EndTimeEditText;
     private Spinner StateSpinner;
     private Button AddButton;
 
@@ -53,11 +59,12 @@ public class MainActivity extends AppCompatActivity {
         StartPointEditText = (EditText) findViewById(R.id.startPoint);
         EndPointEditText = (EditText) findViewById(R.id.endPoint);
         StartTimeEditText = (EditText) findViewById(R.id.startTime);
-        EndTimeEditText = (EditText) findViewById(R.id.endTime);
+       // EndTimeEditText = (EditText) findViewById(R.id.endTime);
         StateSpinner = (Spinner) findViewById(R.id.state);
         AddButton = (Button) findViewById(R.id.button2);
 
         StateSpinner.setSelection(0);
+        StateSpinner.setEnabled(false);
         /**
          *Creator listener to controls - EndTimeEditText, StartTimeEditText
          */
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         if (v == StartTimeEditText){ StartTimeEditText.setText(selectedHour + ":" + selectedMinute);}
-                        else  {EndTimeEditText.setText(selectedHour + ":" + selectedMinute);}
+                       // else  {EndTimeEditText.setText(selectedHour + ":" + selectedMinute);}
                     }
                 }, hour, minute, true);
                 if (v == StartTimeEditText){
@@ -96,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         StartTimeEditText.setOnClickListener(timeP);
-        EndTimeEditText.setOnClickListener(timeP);
+       // EndTimeEditText.setOnClickListener(timeP);
 
         AddButton.setOnClickListener(new OnClickListener() {
             /**
@@ -107,7 +114,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == AddButton) {
-                    addDrive();// add new drive to the database
+                    if (PhoneEditText.getText().toString().trim().length() < 9)
+                        Toast.makeText(getBaseContext(), R.string.error_phone_9_digits, Toast.LENGTH_LONG).show();
+                    else
+                        addDrive();// add new drive to the database
                 }
             }
         }); //add this activity to the Listeners of Click on AddButton.
@@ -123,29 +133,36 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 //if there are strings on the fields: name & phone & start-point , set the button.enable to true
                 //else- set Button.enable to false
-                if(NameEditText.getText().toString().trim().length() == 0||
-                        PhoneEditText.getText().toString().trim().length() == 0||
-                        StartPointEditText.getText().toString().trim().length() == 0 )
+                if (NameEditText.getText().toString().trim().length() == 0 ||
+                        PhoneEditText.getText().toString().trim().length() == 0 ||
+                        StartPointEditText.getText().toString().trim().length() == 0)
                     AddButton.setEnabled(false);
                 else
                     AddButton.setEnabled(true);
 
-               /* if (s == EmailEditText)
-                {
-                    String target = EmailEditText.getText().toString();
-                    try{
-                    if (TextUtils.isEmpty(target)) {
+                boolean isValidEmail = true;
+                String email = EmailEditText.getText().toString();
+                if (isEmpty(email) || email.length() < 5)
+                    isValidEmail = false;
+                ///add valid string
+                int atSign = email.indexOf('@');
+                if (atSign == -1 || atSign != email.lastIndexOf('@') ||
+                        atSign == 0 || atSign == email.length() - 1 || email.contains("\""))
+                    isValidEmail = false;
 
-                    }
-                    else if (! android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches())
-                    {
+                int dotSign = email.indexOf('.', atSign);
+                if (dotSign == -1 || dotSign == 0 || dotSign == email.length() - 1
+                        || dotSign - atSign < 2)
+                    isValidEmail = false;
 
-                    }}
-                    catch (Exception exp)
-                    {
+                if (isValidEmail == false) {
+                    AddButton.setEnabled(false);
+                    EmailEditText.setTextColor(getResources().getColor(R.color.red));
+                }
+                else {
+                    EmailEditText.setTextColor(getResources().getColor(R.color.black));
+                }
 
-                    }
-                }*/
             }
         };
         NameEditText.addTextChangedListener(TW);
@@ -168,25 +185,62 @@ public class MainActivity extends AppCompatActivity {
     /**
      * the function add a new drive from the UI to the database according to the BackendFactory
      */
-    private void addDrive()
-    {
+    private void addDrive() {
         //create a new instance of contentValues
-        final ContentValues contentValues = new ContentValues();
-
+        //final ContentValues contentValues = new ContentValues();
         try {
+            /*
             //put the value from the UI to contentValues
             contentValues.put(TaxiConst.DriveConst.NAME, this.NameEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.PHONE , this.PhoneEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.EMAIL , this.EmailEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.START_POINT , this.StartPointEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.END_POINT , this.EndPointEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.START_TIME , this.StartTimeEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.END_TIME , this.EndTimeEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.STATE , this.StateSpinner.getSelectedItem().toString());
+            contentValues.put(TaxiConst.DriveConst.PHONE, this.PhoneEditText.getText().toString());
+            contentValues.put(TaxiConst.DriveConst.EMAIL, this.EmailEditText.getText().toString());
+            contentValues.put(TaxiConst.DriveConst.START_POINT, this.StartPointEditText.getText().toString());
+            contentValues.put(TaxiConst.DriveConst.END_POINT, this.EndPointEditText.getText().toString());
+            contentValues.put(TaxiConst.DriveConst.START_TIME, this.StartTimeEditText.getText().toString());
+            //contentValues.put(TaxiConst.DriveConst.END_TIME , this.EndTimeEditText.getText().toString());
+            contentValues.put(TaxiConst.DriveConst.END_TIME, "");
+            contentValues.put(TaxiConst.DriveConst.STATE, this.StateSpinner.getSelectedItem().toString());
+*/
+            Drive drive = new Drive();
+            drive.setNameClient(this.NameEditText.getText().toString());
+            drive.setPhoneClient(this.PhoneEditText.getText().toString());
+            drive.setEmailClient(this.EmailEditText.getText().toString());
+            drive.setStartTime(this.StartTimeEditText.getText().toString());
+            drive.setEndTime("");
+            drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
 
-            try {
-                // Getting an instance of the backend using the Function Factory adds a new drive
-                   BackendFactory.getInstance(this).addNewDrive(contentValues);
+            Geocoder gc = new Geocoder(getBaseContext());
+            if (gc.isPresent()) {
+                List<Address> list = gc.getFromLocationName(this.StartPointEditText.getText().toString(), 1);
+                Address address = list.get(0);
+                double lat = address.getLatitude();
+                double lng = address.getLongitude();
+
+                Location locationStart = new Location(this.StartPointEditText.getText().toString());
+                locationStart.setLatitude(lat);
+                locationStart.setLongitude(lng);
+
+                drive.setStartPoint(locationStart);
+            }
+            Geocoder gc2 = new Geocoder(getBaseContext());
+            if (gc2.isPresent()) {
+                List<Address> list = gc2.getFromLocationName(this.EndPointEditText.getText().toString(), 1);
+                Address address = list.get(0);
+                double lat = address.getLatitude();
+                double lng = address.getLongitude();
+
+                Location locationEnd = new Location(this.EndPointEditText.getText().toString());
+                locationEnd.setLatitude(lat);
+                locationEnd.setLongitude(lng);
+
+                drive.setEndPoint(locationEnd);
+            }
+
+
+                try {
+                    // Getting an instance of the backend using the Function Factory adds a new drive
+                    BackendFactory.getInstance(this).addNewDrive(drive);
+
                /* BackendFactory.getInstance(this).addNewDrive(contentValues, new DatabaseFirebase.Action<Long>() {
                     @Override
                     public void onSuccess(Long obj) {
@@ -206,29 +260,27 @@ public class MainActivity extends AppCompatActivity {
 
                 });*/
 
+                    Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
+                }
+
+                // Initialize all the fields
+                this.NameEditText.setText("");
+                this.PhoneEditText.setText("");
+                this.EmailEditText.setText("");
+                this.StartTimeEditText.setText("");
+                //    this.EndTimeEditText.setText("");
+                this.StartPointEditText.setText("");
+                this.EndPointEditText.setText("");
+                StateSpinner.setSelection(0);
+                this.AddButton.setEnabled(false);
+
             }
-            catch (Exception e)
+        catch(Exception exp)
             {
-                Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
+
             }
-
-
-            Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
-            // Initialize all the fields
-            this.NameEditText.setText("");
-            this.PhoneEditText.setText("");
-            this.EmailEditText.setText("");
-            this.StartTimeEditText.setText("");
-            this.EndTimeEditText.setText("");
-            this.StartPointEditText.setText("");
-            this.EndPointEditText.setText("");
-            StateSpinner.setSelection(0);
-            this.AddButton.setEnabled(false);
-
         }
-        catch (Exception exp)
-        {
-
-        }
-    }
 }
