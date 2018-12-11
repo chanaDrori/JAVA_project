@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText EndPointEditText;
     private EditText StartTimeEditText;
    // private EditText EndTimeEditText;
-    private Spinner StateSpinner;
+    //private Spinner StateSpinner;
     private Button AddButton;
 
     /**
@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
         EndPointEditText = (EditText) findViewById(R.id.endPoint);
         StartTimeEditText = (EditText) findViewById(R.id.startTime);
        // EndTimeEditText = (EditText) findViewById(R.id.endTime);
-        StateSpinner = (Spinner) findViewById(R.id.state);
+        //StateSpinner = (Spinner) findViewById(R.id.state);
         AddButton = (Button) findViewById(R.id.button2);
 
-        StateSpinner.setSelection(0);
-        StateSpinner.setEnabled(false);
+       // StateSpinner.setSelection(0);
+       // StateSpinner.setEnabled(false);
         /**
          *Creator listener to controls - EndTimeEditText, StartTimeEditText
          */
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         StartPointEditText.addTextChangedListener(TW);
         EmailEditText.addTextChangedListener(TW);
 
-        StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
+       // StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
 
 
@@ -187,27 +187,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addDrive() {
         //create a new instance of contentValues
-        //final ContentValues contentValues = new ContentValues();
         try {
-            /*
-            //put the value from the UI to contentValues
-            contentValues.put(TaxiConst.DriveConst.NAME, this.NameEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.PHONE, this.PhoneEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.EMAIL, this.EmailEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.START_POINT, this.StartPointEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.END_POINT, this.EndPointEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.START_TIME, this.StartTimeEditText.getText().toString());
-            //contentValues.put(TaxiConst.DriveConst.END_TIME , this.EndTimeEditText.getText().toString());
-            contentValues.put(TaxiConst.DriveConst.END_TIME, "");
-            contentValues.put(TaxiConst.DriveConst.STATE, this.StateSpinner.getSelectedItem().toString());
-*/
             Drive drive = new Drive();
             drive.setNameClient(this.NameEditText.getText().toString());
             drive.setPhoneClient(this.PhoneEditText.getText().toString());
             drive.setEmailClient(this.EmailEditText.getText().toString());
             drive.setStartTime(this.StartTimeEditText.getText().toString());
             drive.setEndTime("");
-            drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
+            //  drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
 
             Geocoder gc = new Geocoder(getBaseContext());
             if (gc.isPresent()) {
@@ -235,11 +222,8 @@ public class MainActivity extends AppCompatActivity {
 
                 drive.setEndPoint(locationEnd);
             }
-
-
-                try {
-                    // Getting an instance of the backend using the Function Factory adds a new drive
-                    BackendFactory.getInstance(this).addNewDrive(drive);
+            // Getting an instance of the backend using the Function Factory adds a new drive
+            BackendFactory.getInstance(this).addNewDrive(drive);
 
                /* BackendFactory.getInstance(this).addNewDrive(contentValues, new DatabaseFirebase.Action<Long>() {
                     @Override
@@ -260,27 +244,19 @@ public class MainActivity extends AppCompatActivity {
 
                 });*/
 
-                    Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e) {
-                    Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
-                }
-
-                // Initialize all the fields
-                this.NameEditText.setText("");
-                this.PhoneEditText.setText("");
-                this.EmailEditText.setText("");
-                this.StartTimeEditText.setText("");
-                //    this.EndTimeEditText.setText("");
-                this.StartPointEditText.setText("");
-                this.EndPointEditText.setText("");
-                StateSpinner.setSelection(0);
-                this.AddButton.setEnabled(false);
-
-            }
-        catch(Exception exp)
-            {
-
-            }
+            // Initialize all the fields
+            this.NameEditText.setText("");
+            this.PhoneEditText.setText("");
+            this.EmailEditText.setText("");
+            this.StartTimeEditText.setText("");
+            //this.EndTimeEditText.setText("");
+            this.StartPointEditText.setText("");
+            this.EndPointEditText.setText("");
+            //StateSpinner.setSelection(0);
+            this.AddButton.setEnabled(false);
+            Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
+        } catch (Exception exp) {
+            Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
         }
+    }
 }

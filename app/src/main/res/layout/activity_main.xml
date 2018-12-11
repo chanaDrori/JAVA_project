@@ -63,18 +63,18 @@
             android:hint="@string/startTime"
             android:inputType="time" />
 
-        <EditText
+        <!--EditText
             android:id="@+id/endTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:hint="@string/there_is_no_need_to_fill"
-            android:inputType="time" />
+            android:inputType="time" /-->
 
-        <Spinner
+        <!--Spinner
             android:id="@+id/state"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" /-->
 
         <Button
             android:id="@+id/button2"

@@ -42,11 +42,10 @@ public class Drive
         this.nameClient = _nameClient;
         this.phoneClient = _phoneClient;
         this.emailClient = _emailClient;
-        
     }
 
     /**
-     * empty constructor
+     * default constructor
      */
     public Drive(){}
 
