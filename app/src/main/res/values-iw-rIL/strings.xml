@@ -11,8 +11,10 @@
     <string name="startTime">זמן תחילת הנסיעה (hh:mm)</string>
     <string name="endTime">זמן סיום הנסיעה (hh:mm)</string>
     <string name="startActivity">start Activity</string>
-    <string name="startButton">לחץ על מנת להתחיל</string>
+    <string name="startButton">לחץ כאן על מנת להתחיל</string>
     <string name="welcomeTextView">ברוך הבא לאפליקציית המוניות!!</string>
     <string name="there_is_no_need_to_fill">זמן סיום </string>
     <string name="error_phone_9_digits">מספר הפלאפון חייב לכלול לפחות 9 ספרות</string>
+    <string name="successAddToFirebase">הנסיעה שלך הוספה בהצלחה</string>
+    <string name="ErrorAddToFireBase">חלה שגיאה בהוספת הנסיעה</string>
 </resources>

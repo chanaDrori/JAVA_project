@@ -9,8 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.project5779.gettaxi.R;
 import com.project5779.gettaxi.model.backend.DBmanager;
 import com.project5779.gettaxi.model.backend.TaxiConst;
 import com.project5779.gettaxi.model.entities.Drive;
@@ -23,12 +26,11 @@ import java.util.List;
 
 public class DatabaseFirebase implements DBmanager{
 
-    //public static int numDrive = 0;
-   /* public interface Action<T> {
+    public interface Action<T> {
         void onSuccess(T obj);
         void onFailure(Exception exception);
         void onProgress(String status, double percent);
-    }*/
+    }
     static DatabaseReference DriveRef;
     //static List<Drive> driveList;
     static {
@@ -38,34 +40,18 @@ public class DatabaseFirebase implements DBmanager{
     }
 
     @Override
-    public void addNewDrive(final Drive newDrive) throws Exception {
-           /* AsyncTask asT = new AsyncTask<Void, Void, Void>() {
-                @Nullable
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    Drive newDrive = ContentValuesToDrive(contentValues);
-                    //DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
-                    DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint()).setValue(newDrive);
-                    return null;
-                }
-            };
-            asT.execute();*/
+    public void addNewDrive(final Drive newDrive, final Action<String> action) throws Exception {
+      //  DriveRef.push().setValue(newDrive);
+        addDriveToFirebase(newDrive, action);
 
-        // Drive newDrive = ContentValuesToDrive(contentValues);
-        //DriveRef.child(String.valueOf(numDrive++)).setValue(newDrive);
-        //DriveRef.child(newDrive.getNameClient() + " " + newDrive.getStartPoint().toString()).setValue(newDrive);
-        DriveRef.push().setValue(newDrive);
     }
 
-
-    /*
-    private static void addDriveToFirebase(final Drive drive, final Action<Long> action)
+    private static void addDriveToFirebase(final Drive drive, final Action<String> action)
     {
-        final String key = String.valueOf(numDrive++);
-        DriveRef.child(key).setValue(drive).addOnSuccessListener(new OnSuccessListener<Void>() {
+        DriveRef.push().setValue(drive).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                action.onSuccess((long) numDrive);
+                action.onSuccess(drive.getNameClient());
                 action.onProgress("upload drive data", 100);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -76,21 +62,4 @@ public class DatabaseFirebase implements DBmanager{
             }
         });
     }
-*/
-
-    /*
-    public static Drive ContentValuesToDrive(ContentValues contentValues)
-    {
-        Drive drive = new Drive();
-        drive.setNameClient(contentValues.getAsString(TaxiConst.DriveConst.NAME));
-        drive.setPhoneClient(contentValues.getAsString(TaxiConst.DriveConst.PHONE));
-        drive.setEmailClient(contentValues.getAsString(TaxiConst.DriveConst.EMAIL));
-        drive.setStartPoint(contentValues.getAsString(TaxiConst.DriveConst.START_POINT));
-        drive.setEndPoint(contentValues.getAsString(TaxiConst.DriveConst.END_POINT));
-        drive.setStartTime(contentValues.getAsString(TaxiConst.DriveConst.START_TIME));
-        drive.setEndTime(contentValues.getAsString(TaxiConst.DriveConst.END_TIME));
-        drive.setState(StateOfDrive.valueOf(contentValues.getAsString(TaxiConst.DriveConst.STATE)));
-        return drive;
-    }
-    */
 }

@@ -9,9 +9,9 @@ public final class BackendFactory
     public static final DBmanager getInstance(Context context)
     {
         if (mode.equals("list")) {
-            if (instance == null) {
+           /* if (instance == null) {
                   instance = new com.project5779.gettaxi.model.datasource.DatabaseList();
-            }
+            }*/
             return instance;
         }
         else

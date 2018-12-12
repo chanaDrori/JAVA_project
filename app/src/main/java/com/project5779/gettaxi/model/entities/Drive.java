@@ -13,13 +13,6 @@ public class Drive
     private String phoneClient;
     private String emailClient;
 
-   /* public Drive(StateOfDrive _state, String _startPoint, String _endPoint, String _startTime, String _endTime,
-                String _nameClient, String _phoneClient, String _emailClient)
-    {
-        this(_state,_startPoint ,_endPoint ,_startTime ,_endTime ,_nameClient ,_phoneClient ,_emailClient );
-    }
-    */
-
     /**
      * constructor of drive.
      * @param _state enum- state of the ride (start/work/end)

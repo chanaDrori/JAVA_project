@@ -223,26 +223,26 @@ public class MainActivity extends AppCompatActivity {
                 drive.setEndPoint(locationEnd);
             }
             // Getting an instance of the backend using the Function Factory adds a new drive
-            BackendFactory.getInstance(this).addNewDrive(drive);
+            //BackendFactory.getInstance(this).addNewDrive(drive);
 
-               /* BackendFactory.getInstance(this).addNewDrive(contentValues, new DatabaseFirebase.Action<Long>() {
-                    @Override
-                    public void onSuccess(Long obj) {
-                        Toast.makeText(getBaseContext(), "insert the drive", Toast.LENGTH_LONG).show();
-                    }
+            BackendFactory.getInstance(this).addNewDrive(drive, new DatabaseFirebase.Action<String>() {
+                @Override
+                public void onSuccess(String obj) {
+                    Toast.makeText(getBaseContext(), "insert the drive", Toast.LENGTH_LONG).show();
+                }
 
-                    @Override
-                    public void onFailure(Exception exception) {
-                        Toast.makeText(getBaseContext(), "error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                @Override
+                public void onFailure(Exception exception) {
+                    Toast.makeText(getBaseContext(), "error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                }
 
-                    @Override
-                    public void onProgress(String status, double percent) {
-                        if (percent != 100)
-                            AddButton.setEnabled(false);
-                    }
+                @Override
+                public void onProgress(String status, double percent) {
+                    if (percent != 100)
+                        AddButton.setEnabled(false);
+                }
 
-                });*/
+            });
 
             // Initialize all the fields
             this.NameEditText.setText("");
@@ -254,9 +254,9 @@ public class MainActivity extends AppCompatActivity {
             this.EndPointEditText.setText("");
             //StateSpinner.setSelection(0);
             this.AddButton.setEnabled(false);
-            Toast.makeText(getApplication(), "Your drive has been added successfully", Toast.LENGTH_SHORT).show();
-        } catch (Exception exp) {
-            Toast.makeText(getBaseContext(), "Error add to fireBase", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplication(), R.string.successAddToFirebase, Toast.LENGTH_SHORT).show();
+        }catch (Exception exp) {
+            Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase, Toast.LENGTH_LONG).show();
         }
     }
 }
