@@ -1,36 +1,30 @@
+/**
+ * Project in Java- Android.
+ * Writers - Tirtza Raaya Rubinstain && Chana Drori
+ * 12/2018
+ *Main Activity code. this file adding a new drive to the BackEnd.
+ */
+
 package com.project5779.gettaxi;
 
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
-import android.content.Context;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Adapter;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.project5779.gettaxi.model.backend.BackendFactory;
-import com.project5779.gettaxi.model.backend.DBmanager;
-import com.project5779.gettaxi.model.backend.TaxiConst;
 import com.project5779.gettaxi.model.datasource.DatabaseFirebase;
 import com.project5779.gettaxi.model.entities.Drive;
-import com.project5779.gettaxi.model.entities.StateOfDrive;
 
 import java.util.Calendar;
 import java.util.List;
@@ -65,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
        // StateSpinner.setSelection(0);
        // StateSpinner.setEnabled(false);
-        /**
-         *Creator listener to controls - EndTimeEditText, StartTimeEditText
-         */
+
+
+        //Creator listener to controls - EndTimeEditText, StartTimeEditText
         OnClickListener timeP = new OnClickListener() {
             /**
              * The function triggers TimePickerDialog when the user click on the match EditText
@@ -82,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     /**
                      * set the string of the time in the editText
-                     * @param timePicker
+                     * @param timePicker TimePicker.
                      * @param selectedHour int. the hour now.
                      * @param selectedMinute int. the minute now.
                      */
@@ -93,11 +87,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, hour, minute, true);
                 if (v == StartTimeEditText){
-                    mTimePicker.setTitle("Set beginning time:");
+                    mTimePicker.setTitle(getString(R.string.setStartTime));
                 }
                 else
                 {
-                    mTimePicker.setTitle("Set end time:");
+                    mTimePicker.setTitle(getString(R.string.SetEndTime));
                 }
                 mTimePicker.show();
             }
@@ -105,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         StartTimeEditText.setOnClickListener(timeP);
        // EndTimeEditText.setOnClickListener(timeP);
 
+        //add this activity to the Listeners of Click on AddButton.
         AddButton.setOnClickListener(new OnClickListener() {
             /**
              * the function add new drive when the user click on the button
-             *
              * @param v View Button
              */
             @Override
@@ -120,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
                         addDrive();// add new drive to the database
                 }
             }
-        }); //add this activity to the Listeners of Click on AddButton.
+        });
 
+       //the function watcher on text changed.
         TextWatcher TW = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -129,10 +124,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
+            /**
+             * the function watcher on text changed.
+             * if there are strings on the fields: name & phone & start-point , set the button.enable to true
+             * else- set Button.enable to false
+             * @param s Editable
+             */
             @Override
             public void afterTextChanged(Editable s) {
-                //if there are strings on the fields: name & phone & start-point , set the button.enable to true
-                //else- set Button.enable to false
                 if (NameEditText.getText().toString().trim().length() == 0 ||
                         PhoneEditText.getText().toString().trim().length() == 0 ||
                         StartPointEditText.getText().toString().trim().length() == 0)
@@ -140,11 +139,11 @@ public class MainActivity extends AppCompatActivity {
                 else
                     AddButton.setEnabled(true);
 
+                //check if strung of the Email is valid.
                 boolean isValidEmail = true;
                 String email = EmailEditText.getText().toString();
                 if (isEmpty(email) || email.length() < 5)
                     isValidEmail = false;
-                ///add valid string
                 int atSign = email.indexOf('@');
                 if (atSign == -1 || atSign != email.lastIndexOf('@') ||
                         atSign == 0 || atSign == email.length() - 1 || email.contains("\""))
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                         || dotSign - atSign < 2)
                     isValidEmail = false;
 
-                if (isValidEmail == false) {
+                if (!isValidEmail) {
                     AddButton.setEnabled(false);
                     EmailEditText.setTextColor(getResources().getColor(R.color.red));
                 }
@@ -173,7 +172,10 @@ public class MainActivity extends AppCompatActivity {
        // StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
 
-
+    /**
+     * the function create a new main activity.
+     * @param savedInstanceState Bundle.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,59 +183,61 @@ public class MainActivity extends AppCompatActivity {
         findViews();
     }
 
+    /**
+     *the function convert string to location
+     * @param str string. address.
+     * @return Location. the location of the string that accepted.
+     * @throws Exception .
+     */
+    public Location StringToLocation(String str) throws Exception {
+        Geocoder gc = new Geocoder(getBaseContext());
+        // if (gc.isPresent()) {
+        List<Address> list = gc.getFromLocationName(str, 1);
+        //  list = gc.getFromLocationName(str, 1);
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        Address address = list.get(0);
+        double lat = address.getLatitude();
+        double lng = address.getLongitude();
 
+        Location locationStart = new Location(str);
+        locationStart.setLatitude(lat);
+        locationStart.setLongitude(lng);
+        return locationStart;
+        //  }
+        //else throw new Exception();
+    }
     /**
      * the function add a new drive from the UI to the database according to the BackendFactory
      */
     private void addDrive() {
-        //create a new instance of contentValues
+        //create a new instance of drive
         try {
             Drive drive = new Drive();
             drive.setNameClient(this.NameEditText.getText().toString());
             drive.setPhoneClient(this.PhoneEditText.getText().toString());
             drive.setEmailClient(this.EmailEditText.getText().toString());
             drive.setStartTime(this.StartTimeEditText.getText().toString());
-            drive.setEndTime("");
-            //  drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
+            //drive.setEndTime("");
+            drive.setStartPointString(this.StartPointEditText.getText().toString());
+            drive.setEndPointString(this.EndPointEditText.getText().toString());
+            // drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
 
-            Geocoder gc = new Geocoder(getBaseContext());
-            if (gc.isPresent()) {
-                List<Address> list = gc.getFromLocationName(this.StartPointEditText.getText().toString(), 1);
-                Address address = list.get(0);
-                double lat = address.getLatitude();
-                double lng = address.getLongitude();
+            drive.setStartPoint(StringToLocation(this.StartPointEditText.getText().toString()));
+            drive.setEndPoint(StringToLocation(this.EndPointEditText.getText().toString()));
 
-                Location locationStart = new Location(this.StartPointEditText.getText().toString());
-                locationStart.setLatitude(lat);
-                locationStart.setLongitude(lng);
-
-                drive.setStartPoint(locationStart);
-            }
-            Geocoder gc2 = new Geocoder(getBaseContext());
-            if (gc2.isPresent()) {
-                List<Address> list = gc2.getFromLocationName(this.EndPointEditText.getText().toString(), 1);
-                Address address = list.get(0);
-                double lat = address.getLatitude();
-                double lng = address.getLongitude();
-
-                Location locationEnd = new Location(this.EndPointEditText.getText().toString());
-                locationEnd.setLatitude(lat);
-                locationEnd.setLongitude(lng);
-
-                drive.setEndPoint(locationEnd);
-            }
             // Getting an instance of the backend using the Function Factory adds a new drive
-            //BackendFactory.getInstance(this).addNewDrive(drive);
-
+            //implement the interface from the file DatabaseFirebase
             BackendFactory.getInstance(this).addNewDrive(drive, new DatabaseFirebase.Action<String>() {
                 @Override
                 public void onSuccess(String obj) {
-                    Toast.makeText(getBaseContext(), "insert the drive", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.successAddToFirebase, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onFailure(Exception exception) {
-                    Toast.makeText(getBaseContext(), "error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase + exception.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -254,8 +258,8 @@ public class MainActivity extends AppCompatActivity {
             this.EndPointEditText.setText("");
             //StateSpinner.setSelection(0);
             this.AddButton.setEnabled(false);
-            Toast.makeText(getApplication(), R.string.successAddToFirebase, Toast.LENGTH_SHORT).show();
-        }catch (Exception exp) {
+
+        }catch (Exception exp) { //if not succeeded add to the BackEnd.
             Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase, Toast.LENGTH_LONG).show();
         }
     }

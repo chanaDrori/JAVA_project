@@ -1,15 +1,10 @@
 package com.project5779.gettaxi.model.datasource;
 
-import android.content.ContentValues;
-
-import com.project5779.gettaxi.model.backend.DBmanager;
-import com.project5779.gettaxi.model.backend.TaxiConst;
 import com.project5779.gettaxi.model.entities.Drive;
-import com.project5779.gettaxi.model.entities.StateOfDrive;
 
 import java.util.ArrayList;
 
-public class DatabaseList// implements DBmanager
+public class DatabaseList// implements BackEnd
 {
     private ArrayList<Drive> DriveList = new ArrayList<Drive>();
 

@@ -1,3 +1,10 @@
+/**
+ * Project in Java- Android.
+ * Writers - Tirtza Raaya Rubinstain && Chana Drori
+ * 12/2018
+ * the class drive describe drive in a taxis company.
+ */
+
 package com.project5779.gettaxi.model.entities;
 
 import android.location.Location;
@@ -12,6 +19,8 @@ public class Drive
     private String nameClient;
     private String phoneClient;
     private String emailClient;
+    private String startPointString;
+    private String endPointString;
 
     /**
      * constructor of drive.
@@ -52,7 +61,7 @@ public class Drive
 
     /**
      * getter
-     * @return endPoint. string - The ending point of the ride
+     * @return endPoint. Location - The ending point of the ride
      */
     public Location getEndPoint() {
         return endPoint;
@@ -92,7 +101,7 @@ public class Drive
 
     /**
      * getter
-     * @return startPoint. string - The starting point of the ride
+     * @return startPoint. Location - The starting point of the ride
      */
     public Location getStartPoint() {
         return startPoint;
@@ -107,8 +116,39 @@ public class Drive
     }
 
     /**
+     * getter
+     * @return startPointString. string - The starting point of the ride
+     */
+    public String getStartPointString() {
+        return startPointString;
+    }
+
+    /**
      * setter
-     * @param endPoint string - The ending point of the ride
+     * @param startPointString string - The starting point of the ride
+     */
+    public void setStartPointString(String startPointString) {
+        this.startPointString = startPointString;
+    }
+
+    /**
+     * getter
+     * @return endPointString. string - The ending point of the ride
+     */
+    public String getEndPointString() {
+        return endPointString;
+    }
+
+    /**
+     * setter
+     * @param endPointString string - The ending point of the ride
+     */
+    public void setEndPointString(String endPointString) {
+        this.endPointString = endPointString;
+    }
+    /**
+     * setter
+     * @param endPoint Location - The ending point of the ride
      */
     public void setEndPoint(Location endPoint) {
         this.endPoint = endPoint;
@@ -148,7 +188,7 @@ public class Drive
 
     /**
      * setter
-     * @param startPoint string - The starting point of the ride
+     * @param startPoint Location - The starting point of the ride
      */
     public void setStartPoint(Location startPoint) {
         this.startPoint = startPoint;

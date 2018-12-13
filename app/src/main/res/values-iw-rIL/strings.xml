@@ -17,4 +17,6 @@
     <string name="error_phone_9_digits">מספר הפלאפון חייב לכלול לפחות 9 ספרות</string>
     <string name="successAddToFirebase">הנסיעה שלך הוספה בהצלחה</string>
     <string name="ErrorAddToFireBase">חלה שגיאה בהוספת הנסיעה</string>
+    <string name="setStartTime">בחר זמן תחילת הנסיעה:</string>
+    <string name="SetEndTime">בחר זמן סיום של הנסיעה:</string>
 </resources>

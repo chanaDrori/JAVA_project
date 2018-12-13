@@ -1,51 +1,57 @@
+/**
+ * Project in Java- Android.
+ * Writers - Tirtza Raaya Rubinstain && Chana Drori
+ * 12/2018
+ * the class DatabaseFirebase implements the interface BackEnd and add the drive to Firebase.
+ */
+
 package com.project5779.gettaxi.model.datasource;
 
-import android.content.ContentValues;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.project5779.gettaxi.R;
-import com.project5779.gettaxi.model.backend.DBmanager;
-import com.project5779.gettaxi.model.backend.TaxiConst;
+import com.project5779.gettaxi.model.backend.BackEnd;
 import com.project5779.gettaxi.model.entities.Drive;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.project5779.gettaxi.model.entities.StateOfDrive;
 
-import java.util.ArrayList;
-import java.util.List;
+public class DatabaseFirebase implements BackEnd {
 
-public class DatabaseFirebase implements DBmanager{
-
+    /**
+     * interface- Helps to check the status of the insert process
+     * @param <T>
+     */
     public interface Action<T> {
         void onSuccess(T obj);
         void onFailure(Exception exception);
         void onProgress(String status, double percent);
     }
-    static DatabaseReference DriveRef;
+    private static DatabaseReference DriveRef;
     //static List<Drive> driveList;
     static {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(); //return a FirebaseDatabase instance.
         DriveRef = database.getReference("Drives");
        // driveList = new ArrayList<>();
     }
 
+    /**Add teh new Drive to FireBase
+     *
+     * @param newDrive Drive a new drive to add
+     * @param action Action<String> include 3 functions: onSuccess, onProgress, onFailure
+     * @throws Exception .
+     */
     @Override
     public void addNewDrive(final Drive newDrive, final Action<String> action) throws Exception {
-      //  DriveRef.push().setValue(newDrive);
         addDriveToFirebase(newDrive, action);
 
     }
 
+    /**
+     *
+     * @param drive Drive a new drive to add
+     * @param action Action<String> include 3 functions: onSuccess, onProgress, onFailure
+     */
     private static void addDriveToFirebase(final Drive drive, final Action<String> action)
     {
         DriveRef.push().setValue(drive).addOnSuccessListener(new OnSuccessListener<Void>() {

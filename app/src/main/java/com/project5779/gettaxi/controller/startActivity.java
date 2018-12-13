@@ -1,3 +1,10 @@
+/**
+ * Project in Java- Android.
+ * Writers - Tirtza Raaya Rubinstain && Chana Drori
+ * 12/2018
+ * the class startActivity is Stam.
+ */
+
 package com.project5779.gettaxi.controller;
 
 import android.app.Activity;
@@ -11,6 +18,10 @@ import com.project5779.gettaxi.R;
 
 public class startActivity extends Activity {
 
+    /**
+     * the function create a new start activity.
+     * @param savedInstanceState Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +30,10 @@ public class startActivity extends Activity {
         Button startButton = (Button)findViewById(R.id.startButton);
 
         startButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * the function listener to click on the button.
+             * @param v View the start button
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

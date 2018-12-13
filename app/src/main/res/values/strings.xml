@@ -16,4 +16,6 @@
     <string name="error_phone_9_digits">The number phone must include 9 digits</string>
     <string name="successAddToFirebase">Your drive has been added successfully</string>
     <string name="ErrorAddToFireBase">Error add the drive</string>
+    <string name="setStartTime">Set beginning time:</string>
+    <string name="SetEndTime">Set end time:</string>
 </resources>
