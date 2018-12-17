@@ -111,10 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == AddButton) {
-                    if (PhoneEditText.getText().toString().trim().length() < 9)
-                        Toast.makeText(getBaseContext(), R.string.error_phone_9_digits, Toast.LENGTH_LONG).show();
-                    else
-                        addDrive();// add new drive to the database
+                    addDrive();// add new drive to the database
                 }
             }
         });
@@ -139,12 +136,21 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (NameEditText.getText().toString().trim().length() == 0 ||
                         PhoneEditText.getText().toString().trim().length() == 0 ||
-                        StartPointEditText.getText().toString().trim().length() == 0)
+                        StartPointEditText.getText().toString().trim().length() == 0||
+                        StartTimeEditText.getText().toString().trim().length() == 0)
                     AddButton.setEnabled(false);
                 else
                     AddButton.setEnabled(true);
 
-                //check if strung of the Email is valid.
+                //check if string of the phone is valid.
+                boolean isValidPhone = true;
+                String phone = PhoneEditText.getText().toString();
+                if (isEmpty(phone) || phone.length() < 9)
+                    isValidPhone = false;
+                if (phone.contains("."))
+                    isValidPhone = false;
+
+                //check if string of the Email is valid.
                 boolean isValidEmail = true;
                 String email = EmailEditText.getText().toString();
                 if (isEmpty(email) || email.length() < 5)
@@ -158,26 +164,54 @@ public class MainActivity extends AppCompatActivity {
                         || dotSign - atSign < 2)
                     isValidEmail = false;
 
-                if (!isValidEmail) {
-                    AddButton.setEnabled(false);
-                    EmailEditText.setTextColor(getResources().getColor(R.color.red));
-                } else {
-                    EmailEditText.setTextColor(getResources().getColor(R.color.black));
-                }
-
+                validationEnable(isValidPhone, PhoneEditText);
+                validationEnable(isValidEmail, EmailEditText);
+                validationEnable(isValidAddress(StartPointEditText.getText().toString()), StartPointEditText);
+                validationEnable(isValidAddress(EndPointEditText.getText().toString()), EndPointEditText);
             }
         };
         NameEditText.addTextChangedListener(TW);
         PhoneEditText.addTextChangedListener(TW);
         StartPointEditText.addTextChangedListener(TW);
         EmailEditText.addTextChangedListener(TW);
+        EndPointEditText.addTextChangedListener(TW);
+        StartTimeEditText.addTextChangedListener(TW);
 
         // StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
 
     /**
+     * check if string of the Address is valid.
+     * @param add String. the address.
+     * @return isValidAddress. true if the address is valid.
+     */
+    public Boolean isValidAddress(String add)
+    {
+        boolean isValidAddress = true;
+        int comma1 = add.indexOf(',');
+        int comma2 = add.lastIndexOf(',');
+        if (comma1 == -1 || comma1 == 0 || comma2 == -1 ||
+                comma2 - comma1 < 2 || comma2 == add.length() - 1)
+            isValidAddress = false;
+        return isValidAddress;
+    }
+
+    /**
+     * the function show to the user if the input is valid and enabled the add button
+     * @param valid Boolean. describe if the input is valid.
+     * @param editText EditText. the source of the input.
+     */
+    public void validationEnable(Boolean valid, EditText editText) {
+        if (!valid) {
+            AddButton.setEnabled(false);
+            editText.setTextColor(getResources().getColor(R.color.red));
+        } else {
+            editText.setTextColor(getResources().getColor(R.color.black));
+        }
+    }
+
+    /**
      * the function create a new main activity.
-     *
      * @param savedInstanceState Bundle.
      */
     @Override
@@ -195,23 +229,18 @@ public class MainActivity extends AppCompatActivity {
      * @throws Exception .
      */
     public Location StringToLocation(String str) throws Exception {
-        Geocoder gc = new Geocoder(getBaseContext());
-        // if (gc.isPresent()) {
-        List<Address> list = gc.getFromLocationName(str, 1);
-        //  list = gc.getFromLocationName(str, 1);
-        if (list == null || list.size() == 0) {
-            return null;
-        }
-        Address address = list.get(0);
-        double lat = address.getLatitude();
-        double lng = address.getLongitude();
+        Geocoder gc = new Geocoder(this);
+        //if (gc.isPresent()) {
+            List<Address> list = gc.getFromLocationName("155 Park Theater, Palo Alto, CA", 1);
+            Address address = list.get(0);
+            double lat = address.getLatitude();
+            double lng = address.getLongitude();
 
-        Location locationStart = new Location(str);
-        locationStart.setLatitude(lat);
-        locationStart.setLongitude(lng);
-        return locationStart;
-        //  }
-        //else throw new Exception();
+            Location locationStart = new Location(str);
+            locationStart.setLatitude(lat);
+            locationStart.setLongitude(lng);
+            return locationStart;
+      //  } else throw new Exception();
     }
 
     /**
@@ -230,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
             drive.setEndPointString(this.EndPointEditText.getText().toString());
             // drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
 
-            drive.setStartPoint(StringToLocation(this.StartPointEditText.getText().toString()));
+            //drive.setStartPoint(StringToLocation(this.StartPointEditText.getText().toString()));
             //drive.setEndPoint(StringToLocation(this.EndPointEditText.getText().toString()));
 
             // Getting an instance of the backend using the Function Factory adds a new drive
@@ -274,35 +303,4 @@ public class MainActivity extends AppCompatActivity {
         //StateSpinner.setSelection(0);
         this.AddButton.setEnabled(false);
     }
-
-    /**
-     * close the application
-     */
-    /*public void kill_activity()
-    {
-        finish();
-        System.exit(0);
-    }
-
-
-    public void successAddDrive() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getBaseContext());
-        alertDialogBuilder.setTitle(R.string.successAddToFirebase);
-        alertDialogBuilder.setMessage(R.string.whatNowToDo);
-        AlertDialog.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                if (which == Dialog.BUTTON_POSITIVE)
-                    init();
-                else
-                    kill_activity();
-            }
-        };
-        alertDialogBuilder.setPositiveButton(getString(R.string.Add_another_drive), onClickListener);
-        alertDialogBuilder.setNegativeButton(getString(R.string.close), onClickListener);
-
-       // alertDialogBuilder.create().show();
-        alertDialogBuilder.show();
-    }*/
 }
