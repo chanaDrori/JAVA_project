@@ -49,7 +49,9 @@ public class Drive
     /**
      * default constructor
      */
-    public Drive(){}
+    public Drive(){
+        state = StateOfDrive.AVAILABLE;
+    }
 
     /**
      * getter

@@ -267,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
             BackendFactory.getInstance(this).addNewDrive(drive, new DatabaseFirebase.Action<String>() {
                 @Override
                 public void onSuccess(String obj) {
-                    //successAddDrive();
                     Toast.makeText(getBaseContext(), R.string.successAddToFirebase, Toast.LENGTH_LONG).show();
                 }
 

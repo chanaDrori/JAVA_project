@@ -35,8 +35,8 @@ public class DatabaseFirebase implements BackEnd {
        // driveList = new ArrayList<>();
     }
 
-    /**Add teh new Drive to FireBase
-     *
+    /**
+     *Add the new Drive to FireBase
      * @param newDrive Drive a new drive to add
      * @param action Action<String> include 3 functions: onSuccess, onProgress, onFailure
      * @throws Exception .
