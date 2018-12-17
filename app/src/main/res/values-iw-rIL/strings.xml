@@ -19,4 +19,7 @@
     <string name="ErrorAddToFireBase">חלה שגיאה בהוספת הנסיעה</string>
     <string name="setStartTime">בחר זמן תחילת הנסיעה:</string>
     <string name="SetEndTime">בחר זמן סיום של הנסיעה:</string>
+    <string name="whatNowToDo"> מה ברצונך לעשות כעת?</string>
+    <string name="Add_another_drive">הוסף נסיעה נוספת</string>
+    <string name="close">סגור</string>
 </resources>

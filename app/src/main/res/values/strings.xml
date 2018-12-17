@@ -18,4 +18,7 @@
     <string name="ErrorAddToFireBase">Error add the drive</string>
     <string name="setStartTime">Set beginning time:</string>
     <string name="SetEndTime">Set end time:</string>
+    <string name="whatNowToDo">What would you like to do now?</string>
+    <string name="Add_another_drive">Add another drive</string>
+    <string name="close">Close</string>
 </resources>

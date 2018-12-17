@@ -7,7 +7,10 @@
 
 package com.project5779.gettaxi;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -39,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText StartPointEditText;
     private EditText EndPointEditText;
     private EditText StartTimeEditText;
-   // private EditText EndTimeEditText;
+    // private EditText EndTimeEditText;
     //private Spinner StateSpinner;
     private Button AddButton;
 
     /**
-     *The function finds all the objects "View" from this Activity
+     * The function finds all the objects "View" from this Activity
      */
     private void findViews() {
         NameEditText = (EditText) findViewById(R.id.name);
@@ -53,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
         StartPointEditText = (EditText) findViewById(R.id.startPoint);
         EndPointEditText = (EditText) findViewById(R.id.endPoint);
         StartTimeEditText = (EditText) findViewById(R.id.startTime);
-       // EndTimeEditText = (EditText) findViewById(R.id.endTime);
+        // EndTimeEditText = (EditText) findViewById(R.id.endTime);
         //StateSpinner = (Spinner) findViewById(R.id.state);
         AddButton = (Button) findViewById(R.id.button2);
 
-       // StateSpinner.setSelection(0);
-       // StateSpinner.setEnabled(false);
+        // StateSpinner.setSelection(0);
+        // StateSpinner.setEnabled(false);
 
 
         //Creator listener to controls - EndTimeEditText, StartTimeEditText
@@ -82,22 +85,22 @@ public class MainActivity extends AppCompatActivity {
                      */
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        if (v == StartTimeEditText){ StartTimeEditText.setText(selectedHour + ":" + selectedMinute);}
-                       // else  {EndTimeEditText.setText(selectedHour + ":" + selectedMinute);}
+                        if (v == StartTimeEditText) {
+                            StartTimeEditText.setText(selectedHour + ":" + selectedMinute);
+                        }
+                        // else  {EndTimeEditText.setText(selectedHour + ":" + selectedMinute);}
                     }
                 }, hour, minute, true);
-                if (v == StartTimeEditText){
+                if (v == StartTimeEditText) {
                     mTimePicker.setTitle(getString(R.string.setStartTime));
-                }
-                else
-                {
+                } else {
                     mTimePicker.setTitle(getString(R.string.SetEndTime));
                 }
                 mTimePicker.show();
             }
         };
         StartTimeEditText.setOnClickListener(timeP);
-       // EndTimeEditText.setOnClickListener(timeP);
+        // EndTimeEditText.setOnClickListener(timeP);
 
         //add this activity to the Listeners of Click on AddButton.
         AddButton.setOnClickListener(new OnClickListener() {
@@ -116,13 +119,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       //the function watcher on text changed.
+        //the function watcher on text changed.
         TextWatcher TW = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             /**
              * the function watcher on text changed.
@@ -148,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 if (atSign == -1 || atSign != email.lastIndexOf('@') ||
                         atSign == 0 || atSign == email.length() - 1 || email.contains("\""))
                     isValidEmail = false;
-
                 int dotSign = email.indexOf('.', atSign);
                 if (dotSign == -1 || dotSign == 0 || dotSign == email.length() - 1
                         || dotSign - atSign < 2)
@@ -157,8 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!isValidEmail) {
                     AddButton.setEnabled(false);
                     EmailEditText.setTextColor(getResources().getColor(R.color.red));
-                }
-                else {
+                } else {
                     EmailEditText.setTextColor(getResources().getColor(R.color.black));
                 }
 
@@ -169,11 +172,12 @@ public class MainActivity extends AppCompatActivity {
         StartPointEditText.addTextChangedListener(TW);
         EmailEditText.addTextChangedListener(TW);
 
-       // StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
+        // StateSpinner.setAdapter(new ArrayAdapter<StateOfDrive>(this, android.R.layout.simple_spinner_item, StateOfDrive.values()));
     }
 
     /**
      * the function create a new main activity.
+     *
      * @param savedInstanceState Bundle.
      */
     @Override
@@ -184,7 +188,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *the function convert string to location
+     * the function convert string to location
+     *
      * @param str string. address.
      * @return Location. the location of the string that accepted.
      * @throws Exception .
@@ -208,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         //  }
         //else throw new Exception();
     }
+
     /**
      * the function add a new drive from the UI to the database according to the BackendFactory
      */
@@ -225,19 +231,20 @@ public class MainActivity extends AppCompatActivity {
             // drive.setState(StateOfDrive.valueOf(this.StateSpinner.getSelectedItem().toString()));
 
             drive.setStartPoint(StringToLocation(this.StartPointEditText.getText().toString()));
-            drive.setEndPoint(StringToLocation(this.EndPointEditText.getText().toString()));
+            //drive.setEndPoint(StringToLocation(this.EndPointEditText.getText().toString()));
 
             // Getting an instance of the backend using the Function Factory adds a new drive
             //implement the interface from the file DatabaseFirebase
             BackendFactory.getInstance(this).addNewDrive(drive, new DatabaseFirebase.Action<String>() {
                 @Override
                 public void onSuccess(String obj) {
+                    //successAddDrive();
                     Toast.makeText(getBaseContext(), R.string.successAddToFirebase, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onFailure(Exception exception) {
-                    Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase + exception.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -247,20 +254,55 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             });
-
-            // Initialize all the fields
-            this.NameEditText.setText("");
-            this.PhoneEditText.setText("");
-            this.EmailEditText.setText("");
-            this.StartTimeEditText.setText("");
-            //this.EndTimeEditText.setText("");
-            this.StartPointEditText.setText("");
-            this.EndPointEditText.setText("");
-            //StateSpinner.setSelection(0);
-            this.AddButton.setEnabled(false);
-
-        }catch (Exception exp) { //if not succeeded add to the BackEnd.
+            init();
+        } catch (Exception exp) { //if not succeeded add to the BackEnd.
             Toast.makeText(getBaseContext(), R.string.ErrorAddToFireBase, Toast.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * Initialize all the fields
+     */
+    public void init() {
+        this.NameEditText.setText("");
+        this.PhoneEditText.setText("");
+        this.EmailEditText.setText("");
+        this.StartTimeEditText.setText("");
+        //this.EndTimeEditText.setText("");
+        this.StartPointEditText.setText("");
+        this.EndPointEditText.setText("");
+        //StateSpinner.setSelection(0);
+        this.AddButton.setEnabled(false);
+    }
+
+    /**
+     * close the application
+     */
+    /*public void kill_activity()
+    {
+        finish();
+        System.exit(0);
+    }
+
+
+    public void successAddDrive() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getBaseContext());
+        alertDialogBuilder.setTitle(R.string.successAddToFirebase);
+        alertDialogBuilder.setMessage(R.string.whatNowToDo);
+        AlertDialog.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (which == Dialog.BUTTON_POSITIVE)
+                    init();
+                else
+                    kill_activity();
+            }
+        };
+        alertDialogBuilder.setPositiveButton(getString(R.string.Add_another_drive), onClickListener);
+        alertDialogBuilder.setNegativeButton(getString(R.string.close), onClickListener);
+
+       // alertDialogBuilder.create().show();
+        alertDialogBuilder.show();
+    }*/
 }
