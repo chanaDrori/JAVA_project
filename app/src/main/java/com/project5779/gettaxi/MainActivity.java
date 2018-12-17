@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (NameEditText.getText().toString().trim().length() == 0 ||
                         PhoneEditText.getText().toString().trim().length() == 0 ||
-                        StartPointEditText.getText().toString().trim().length() == 0||
+                        StartPointEditText.getText().toString().trim().length() == 0 ||
                         StartTimeEditText.getText().toString().trim().length() == 0)
                     AddButton.setEnabled(false);
                 else
@@ -182,11 +182,11 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * check if string of the Address is valid.
+     *
      * @param add String. the address.
      * @return isValidAddress. true if the address is valid.
      */
-    public Boolean isValidAddress(String add)
-    {
+    public Boolean isValidAddress(String add) {
         boolean isValidAddress = true;
         int comma1 = add.indexOf(',');
         int comma2 = add.lastIndexOf(',');
@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * the function show to the user if the input is valid and enabled the add button
-     * @param valid Boolean. describe if the input is valid.
+     *
+     * @param valid    Boolean. describe if the input is valid.
      * @param editText EditText. the source of the input.
      */
     public void validationEnable(Boolean valid, EditText editText) {
@@ -212,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * the function create a new main activity.
+     *
      * @param savedInstanceState Bundle.
      */
     @Override
@@ -231,16 +233,16 @@ public class MainActivity extends AppCompatActivity {
     public Location StringToLocation(String str) throws Exception {
         Geocoder gc = new Geocoder(this);
         //if (gc.isPresent()) {
-            List<Address> list = gc.getFromLocationName("155 Park Theater, Palo Alto, CA", 1);
-            Address address = list.get(0);
-            double lat = address.getLatitude();
-            double lng = address.getLongitude();
+        List<Address> list = gc.getFromLocationName("155 Park Theater, Palo Alto, CA", 1);
+        Address address = list.get(0);
+        double lat = address.getLatitude();
+        double lng = address.getLongitude();
 
-            Location locationStart = new Location(str);
-            locationStart.setLatitude(lat);
-            locationStart.setLongitude(lng);
-            return locationStart;
-      //  } else throw new Exception();
+        Location locationStart = new Location(str);
+        locationStart.setLatitude(lat);
+        locationStart.setLongitude(lng);
+        return locationStart;
+        //  } else throw new Exception();
     }
 
     /**
