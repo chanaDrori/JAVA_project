@@ -21,6 +21,7 @@ public class Drive
     private String emailClient;
     private String startPointString;
     private String endPointString;
+    private String driverID;
 
     /**
      * constructor of drive.
@@ -51,6 +52,7 @@ public class Drive
      */
     public Drive(){
         state = StateOfDrive.AVAILABLE;
+        driverID = "";
     }
 
     /**
@@ -233,5 +235,13 @@ public class Drive
                 this.nameClient.equals(drive.getNameClient()) &&
                 this.phoneClient.equals(drive.getPhoneClient()) &&
                 this.startTime.equals(drive.getStartTime()));
+    }
+
+    public String getDriverID() {
+        return driverID;
+    }
+
+    public void setDriverID(String driverID) {
+        this.driverID = driverID;
     }
 }
