@@ -53,6 +53,7 @@ public class Drive
     public Drive(){
         state = StateOfDrive.AVAILABLE;
         driverID = "";
+        endTime ="";
     }
 
     /**
